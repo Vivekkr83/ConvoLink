@@ -1,8 +1,9 @@
+require('dotenv').config();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
-const GOOGLE_CLIENT_ID = '479963282741-lctkne9a1tpeb1mq3h2atba208pr88io.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '95hN6rBJlD2okXh7ccfSDNUi';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
