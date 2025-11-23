@@ -63,9 +63,9 @@ app.get('/schedule-meet', isLoggedIn, (req,res)=>{
 
 app.get('/sendMail',isLoggedIn, (req,res)=>{
 
-  var transporter = nodemailer.createTransport({service: 'gmail', 
+  var transporter = nodemailer.createTransport({service: 'gmail',
   auth: {user: process.env.email,pass: process.env.app_pass}});
-  
+
   var port =  (process.env.PORT) ? `${process.env.PORT}` : `3000`
   var meetlink =  `localhost:` + port + `/${uid()}`
 
@@ -74,12 +74,12 @@ app.get('/sendMail',isLoggedIn, (req,res)=>{
     to: `${req.query.reciever}, ${req.user.email}`,
     subject: `Scheduled Meeting on the topic ${req.query.topic}`,
     text: `A meeting is scheduled by ${req.user.displayName} on ${req.query.date}`+
-          ` at ${req.query.time} on the topic of ${req.query.topic}. 
+          ` at ${req.query.time} on the topic of ${req.query.topic}.
 The link for the meet is ${meetlink}.
 Please Join the meet on time.
 This is a computer generated Mail. Another reminder mail will be sent to you before the meeting`
   };
-  
+
   transporter.sendMail(mailOptions);
   console.log(req.query.date)
 
@@ -125,18 +125,18 @@ io.on('connection', socket => {
     if(!ObjectListofALL[roomId]){
       ObjectListofALL[roomId] = [userInfo];
     }
-    
+
     socket.to(roomId).emit('user-let-in', userId, userNameOrignal)
-    
+
     socket.on('UsercanJoin', (userId1) => {
       ObjectListofALL[roomId].push(userInfo);
-      io.to(roomId).emit('user-connected', userId1)  
+      io.to(roomId).emit('user-connected', userId1)
     })
 
     socket.on('UsercantJoin', (userId1) => {
       socket.to(roomId).emit('RemoveParticipant', userId1)
     })
-    
+
         // messages
     socket.on('message', (message) => {
         //send message to the same room
@@ -174,4 +174,6 @@ io.on('connection', socket => {
   })
 })
 
-server.listen( process.env.PORT || 3000)
+server.listen( process.env.PORT || 3000, () => {
+  console.log(`Server is running on PORT ${process.env.PORT || 3000}`)
+})
